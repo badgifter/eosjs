@@ -68,7 +68,7 @@ export class JsonRpc implements AuthorityProvider, AbiProvider {
         if (args.fetch) {
             this.fetchBuiltin = args.fetch;
         } else {
-            this.fetchBuiltin = (global as any).fetch;
+            this.fetchBuiltin = fetch?fetch:window.fetch?window.fetch:global.fetch as any;
         }
     }
 
