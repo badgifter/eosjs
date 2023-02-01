@@ -11,9 +11,9 @@ var PublicKey = /** @class */ (function () {
     }
     /** Instantiate public key from an EOSIO-format public key */
     PublicKey.fromString = function (publicKeyStr, ec) {
-        var key = eosjs_numeric_1.stringToPublicKey(publicKeyStr);
+        var key = (0, eosjs_numeric_1.stringToPublicKey)(publicKeyStr);
         if (!ec) {
-            ec = eosjs_key_conversions_1.constructElliptic(key.type);
+            ec = (0, eosjs_key_conversions_1.constructElliptic)(key.type);
         }
         return new PublicKey(key, ec);
     };
@@ -22,7 +22,7 @@ var PublicKey = /** @class */ (function () {
         var x = publicKey.getPublic().getX().toArray('be', 32);
         var y = publicKey.getPublic().getY().toArray('be', 32);
         if (!ec) {
-            ec = eosjs_key_conversions_1.constructElliptic(keyType);
+            ec = (0, eosjs_key_conversions_1.constructElliptic)(keyType);
         }
         return new PublicKey({
             type: keyType,
@@ -31,11 +31,11 @@ var PublicKey = /** @class */ (function () {
     };
     /** Export public key as EOSIO-format public key */
     PublicKey.prototype.toString = function () {
-        return eosjs_numeric_1.publicKeyToString(this.key);
+        return (0, eosjs_numeric_1.publicKeyToString)(this.key);
     };
     /** Export public key as Legacy EOSIO-format public key */
     PublicKey.prototype.toLegacyString = function () {
-        return eosjs_numeric_1.publicKeyToLegacyString(this.key);
+        return (0, eosjs_numeric_1.publicKeyToLegacyString)(this.key);
     };
     /** Export public key as `elliptic`-format public key */
     PublicKey.prototype.toElliptic = function () {

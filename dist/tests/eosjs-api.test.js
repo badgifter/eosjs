@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -319,19 +319,19 @@ describe('eosjs-api', function () {
             '1.2': 'DmVvc2lvOjphYmkvMS4yAAcDZGVsAAEEdXVpZAZzdHJpbmcMZ2V0YnlhY2NuYW1lAAEMYWNjb3VudF9uYW1lBG5hbWUKdG9kb19lbnRyeQAEBHV1aWQGc3RyaW5nDGFjY291bnRfbmFtZRF0dXBsZV9zdHJpbmdfbmFtZQR0YXNrE3R1cGxlX3N0cmluZ19zdHJpbmcHY2hlY2tlZBF0dXBsZV9zdHJpbmdfYm9vbBF0dXBsZV9zdHJpbmdfYm9vbAACB2ZpZWxkXzAGc3RyaW5nB2ZpZWxkXzEEYm9vbBF0dXBsZV9zdHJpbmdfbmFtZQACB2ZpZWxkXzAGc3RyaW5nB2ZpZWxkXzEEbmFtZRN0dXBsZV9zdHJpbmdfc3RyaW5nAAIHZmllbGRfMAZzdHJpbmcHZmllbGRfMQZzdHJpbmcGdXBzZXJ0AAQEdXVpZAZzdHJpbmcMYWNjb3VudF9uYW1lBG5hbWUEdGFzawZzdHJpbmcHY2hlY2tlZARib29sAwAAAAAAAKJKA2RlbACgpJkIGX+yYgxnZXRieWFjY25hbWUAAAAAAOSrcNUGdXBzZXJ0AAAAAAAAAqCkmQgZf7JiDHRvZG9fZW50cnlbXQAAAADkq3DVCnRvZG9fZW50cnkBAAAAANBE84YKdG9kb19lbnRyeQAAAAAAkJzWBnN0cmluZwMAAABASTMRMhF0dXBsZV9zdHJpbmdfbmFtZQAAACApiFRDEXR1cGxlX3N0cmluZ19ib29sAAAAAAAAsckTdHVwbGVfc3RyaW5nX3N0cmluZw===',
         };
         it('deserializes/serializes the 1.0 abi', function () {
-            var raw = eosjs_numeric_1.base64ToBinary(serializedAbis['1.0']);
+            var raw = (0, eosjs_numeric_1.base64ToBinary)(serializedAbis['1.0']);
             var deserializedAbi = api.rawAbiToJson(raw);
             var serializedAbi = api.jsonToRawAbi(deserializedAbi);
             expect(serializedAbi).toEqual(raw);
         });
         it('deserializes/serializes the 1.1 abi', function () {
-            var raw = eosjs_numeric_1.base64ToBinary(serializedAbis['1.1']);
+            var raw = (0, eosjs_numeric_1.base64ToBinary)(serializedAbis['1.1']);
             var deserializedAbi = api.rawAbiToJson(raw);
             var serializedAbi = api.jsonToRawAbi(deserializedAbi);
             expect(serializedAbi).toEqual(raw);
         });
         it('deserializes/serializes the 1.2 abi', function () {
-            var raw = eosjs_numeric_1.base64ToBinary(serializedAbis['1.2']);
+            var raw = (0, eosjs_numeric_1.base64ToBinary)(serializedAbis['1.2']);
             var deserializedAbi = api.rawAbiToJson(raw);
             var serializedAbi = api.jsonToRawAbi(deserializedAbi);
             expect(serializedAbi).toEqual(raw);

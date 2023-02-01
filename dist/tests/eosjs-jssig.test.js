@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -81,14 +81,14 @@ describe('JsSignatureProvider', function () {
     // These are simplified tests simply to verify a refactor didn't mess with existing code
     describe('secp256k1 elliptic', function () {
         it('generates a private and public key pair', function () {
-            var _a = eosjs_key_conversions_1.generateKeyPair(eosjs_numeric_1.KeyType.k1, { secureEnv: true }), privateKey = _a.privateKey, publicKey = _a.publicKey;
+            var _a = (0, eosjs_key_conversions_1.generateKeyPair)(eosjs_numeric_1.KeyType.k1, { secureEnv: true }), privateKey = _a.privateKey, publicKey = _a.publicKey;
             expect(privateKey).toBeInstanceOf(eosjs_key_conversions_1.PrivateKey);
             expect(privateKey.isValid()).toBeTruthy();
             expect(publicKey).toBeInstanceOf(eosjs_key_conversions_1.PublicKey);
             expect(publicKey.isValid()).toBeTruthy();
         });
         it('throws error with no options.secureEnv variable', function () {
-            expect(function () { return eosjs_key_conversions_1.generateKeyPair(eosjs_numeric_1.KeyType.k1); }).toThrowError();
+            expect(function () { return (0, eosjs_key_conversions_1.generateKeyPair)(eosjs_numeric_1.KeyType.k1); }).toThrowError();
         });
         it('Retrieves the public key from a private key', function () {
             var privateKey = eosjs_key_conversions_1.PrivateKey.fromString(privateKeys[0]);
@@ -169,7 +169,7 @@ describe('JsSignatureProvider', function () {
                     case 1:
                         signOutput = _a.sent();
                         signature = eosjs_key_conversions_1.Signature.fromString(signOutput.signatures[0]);
-                        expect(signature.verify(eosjs_jssig_1.digestFromSerializedData(chainId, serializedTransaction), eosjs_key_conversions_1.PublicKey.fromString(k1FormatPublicKeys[0]), false)).toEqual(true);
+                        expect(signature.verify((0, eosjs_jssig_1.digestFromSerializedData)(chainId, serializedTransaction), eosjs_key_conversions_1.PublicKey.fromString(k1FormatPublicKeys[0]), false)).toEqual(true);
                         return [2 /*return*/];
                 }
             });
@@ -220,7 +220,7 @@ describe('JsSignatureProvider', function () {
             var KPrivStr = privateKeys[0];
             var KPriv = eosjs_key_conversions_1.PrivateKey.fromString(KPrivStr);
             var dataAsString = 'some string';
-            var ellipticHashedString = eosjs_key_conversions_1.sha256(dataAsString);
+            var ellipticHashedString = (0, eosjs_key_conversions_1.sha256)(dataAsString);
             var sig = KPriv.sign(ellipticHashedString);
             var KPub = sig.recover(ellipticHashedString);
             expect(KPub.toString()).toEqual(k1FormatPublicKeys[0]);
@@ -250,14 +250,14 @@ describe('JsSignatureProvider', function () {
     });
     describe('p256 elliptic', function () {
         it('generates a private and public key pair', function () {
-            var _a = eosjs_key_conversions_1.generateKeyPair(eosjs_numeric_1.KeyType.r1, { secureEnv: true }), privateKey = _a.privateKey, publicKey = _a.publicKey;
+            var _a = (0, eosjs_key_conversions_1.generateKeyPair)(eosjs_numeric_1.KeyType.r1, { secureEnv: true }), privateKey = _a.privateKey, publicKey = _a.publicKey;
             expect(privateKey).toBeInstanceOf(eosjs_key_conversions_1.PrivateKey);
             expect(privateKey.isValid()).toBeTruthy();
             expect(publicKey).toBeInstanceOf(eosjs_key_conversions_1.PublicKey);
             expect(publicKey.isValid()).toBeTruthy();
         });
         it('throws error with no options.secureEnv variable', function () {
-            expect(function () { return eosjs_key_conversions_1.generateKeyPair(eosjs_numeric_1.KeyType.r1); }).toThrowError();
+            expect(function () { return (0, eosjs_key_conversions_1.generateKeyPair)(eosjs_numeric_1.KeyType.r1); }).toThrowError();
         });
         it('throws error when attempting a legacy private key from r1 format', function () {
             var privateKey = eosjs_key_conversions_1.PrivateKey.fromString(privateKeysR1[0]);
@@ -346,7 +346,7 @@ describe('JsSignatureProvider', function () {
                     case 1:
                         signOutput = _a.sent();
                         signature = eosjs_key_conversions_1.Signature.fromString(signOutput.signatures[0]);
-                        expect(signature.verify(eosjs_jssig_1.digestFromSerializedData(chainId, serializedTransaction), eosjs_key_conversions_1.PublicKey.fromString(r1FormatPublicKeys[0]), false)).toEqual(true);
+                        expect(signature.verify((0, eosjs_jssig_1.digestFromSerializedData)(chainId, serializedTransaction), eosjs_key_conversions_1.PublicKey.fromString(r1FormatPublicKeys[0]), false)).toEqual(true);
                         return [2 /*return*/];
                 }
             });
@@ -380,7 +380,7 @@ describe('JsSignatureProvider', function () {
             var KPrivStr = privateKeysR1[0];
             var KPriv = eosjs_key_conversions_1.PrivateKey.fromString(KPrivStr);
             var dataAsString = 'some string';
-            var ellipticHashedString = eosjs_key_conversions_1.sha256(dataAsString);
+            var ellipticHashedString = (0, eosjs_key_conversions_1.sha256)(dataAsString);
             var sig = KPriv.sign(ellipticHashedString);
             var KPub = sig.recover(ellipticHashedString);
             expect(KPub.toString()).toEqual(r1FormatPublicKeys[0]);

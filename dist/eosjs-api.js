@@ -30,7 +30,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -67,10 +67,14 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var __values = (this && this.__values) || function(o) {
     var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
@@ -161,11 +165,11 @@ var Api = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         e_1 = _a.sent();
-                        e_1.message = "fetching abi for " + accountName + ": " + e_1.message;
+                        e_1.message = "fetching abi for ".concat(accountName, ": ").concat(e_1.message);
                         throw e_1;
                     case 4:
                         if (!cachedAbi) {
-                            throw new Error("Missing abi for " + accountName);
+                            throw new Error("Missing abi for ".concat(accountName));
                         }
                         this.cachedAbis.set(accountName, cachedAbi);
                         return [2 /*return*/, cachedAbi];
@@ -195,7 +199,7 @@ var Api = /** @class */ (function () {
                 actions = (transaction.context_free_actions || []).concat(transaction.actions);
                 accounts = actions.map(function (action) { return action.account; });
                 uniqueAccounts = new Set(accounts);
-                actionPromises = __spreadArray([], __read(uniqueAccounts)).map(function (account) { return __awaiter(_this, void 0, void 0, function () {
+                actionPromises = __spreadArray([], __read(uniqueAccounts), false).map(function (account) { return __awaiter(_this, void 0, void 0, function () {
                     var _a;
                     return __generator(this, function (_b) {
                         switch (_b.label) {
@@ -369,11 +373,11 @@ var Api = /** @class */ (function () {
     };
     /** Deflate a serialized object */
     Api.prototype.deflateSerializedArray = function (serializedArray) {
-        return pako_1.deflate(serializedArray, { level: 9 });
+        return (0, pako_1.deflate)(serializedArray, { level: 9 });
     };
     /** Inflate a compressed serialized object */
     Api.prototype.inflateSerializedArray = function (compressedSerializedArray) {
-        return pako_1.inflate(compressedSerializedArray);
+        return (0, pako_1.inflate)(compressedSerializedArray);
     };
     /**
      * Create and optionally broadcast a transaction.
@@ -434,7 +438,8 @@ var Api = /** @class */ (function () {
                         serializedTransaction = this.serializeTransaction(transaction);
                         serializedContextFreeData = this.serializeContextFreeData(transaction.context_free_data);
                         pushTransactionArgs = {
-                            serializedTransaction: serializedTransaction, serializedContextFreeData: serializedContextFreeData,
+                            serializedTransaction: serializedTransaction,
+                            serializedContextFreeData: serializedContextFreeData,
                             signatures: []
                         };
                         if (!sign) return [3 /*break*/, 12];

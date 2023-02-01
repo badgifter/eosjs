@@ -158,12 +158,12 @@ export interface QueryConfig {
  * * [string, Anyvar, Query[]]:                        [method, arg, filter]
  * * {method: string, arg?: Anyvar, filter?: Query[]}  explicit form
  */
-export declare type Query = string | [string, Query[]] | [string, Anyvar, Query[]] | {
+export type Query = string | [string, Query[]] | [string, Anyvar, Query[]] | {
     method: string;
     arg?: Anyvar;
     filter?: Query[];
 };
-export declare type ContextFreeGroupCallback = (index: {
+export type ContextFreeGroupCallback = (index: {
     cfa: number;
     cfd: number;
 }) => {

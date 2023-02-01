@@ -13,7 +13,7 @@ exports.ecc = {
             console.warn('Argument `cpuEntropyBits` is deprecated, ' +
                 'use the options argument instead');
         }
-        var privateKey = eosjs_key_conversions_1.generateKeyPair(eosjs_numeric_1.KeyType.k1, options).privateKey;
+        var privateKey = (0, eosjs_key_conversions_1.generateKeyPair)(eosjs_numeric_1.KeyType.k1, options).privateKey;
         return Promise.resolve(privateKey.toLegacyString());
     },
     seedPrivate: function () { return console.error('Method deprecated'); },

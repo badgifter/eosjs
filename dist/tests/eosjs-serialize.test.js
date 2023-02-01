@@ -5,7 +5,7 @@ var eosjs_serialize_1 = require("../eosjs-serialize");
 describe('Serialize', function () {
     var types;
     beforeAll(function () {
-        types = eosjs_serialize_1.createInitialTypes();
+        types = (0, eosjs_serialize_1.createInitialTypes)();
     });
     it('should be able to createInitialTypes', function () {
         expect(types).toBeTruthy();
@@ -22,7 +22,7 @@ describe('Serialize', function () {
         });
         var expectSuccessForICharactersSymbol = function (i) {
             var symbol = genericValidSymbolCharacter.repeat(i);
-            var asset = "10.000 " + symbol;
+            var asset = "10.000 ".concat(symbol);
             serialBuffer.pushAsset(asset);
             expect(serialBuffer.length).not.toBe(0);
         };
@@ -38,7 +38,7 @@ describe('Serialize', function () {
             expect(exceptionCaught).toBeTruthy();
         };
         var _loop_1 = function (i) {
-            it("should be able to push asset with valid symbol of " + i + " character(s)", function () {
+            it("should be able to push asset with valid symbol of ".concat(i, " character(s)"), function () {
                 expectSuccessForICharactersSymbol(i);
             });
         };
