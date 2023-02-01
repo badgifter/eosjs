@@ -15,14 +15,10 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 var __values = (this && this.__values) || function(o) {
     var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
@@ -112,14 +108,14 @@ var signedDecimalToBinary = function (size, s) {
     if (negative) {
         s = s.substr(1);
     }
-    var result = (0, exports.decimalToBinary)(size, s);
+    var result = exports.decimalToBinary(size, s);
     if (negative) {
-        (0, exports.negate)(result);
-        if (!(0, exports.isNegative)(result)) {
+        exports.negate(result);
+        if (!exports.isNegative(result)) {
             throw new Error('number is out of range');
         }
     }
-    else if ((0, exports.isNegative)(result)) {
+    else if (exports.isNegative(result)) {
         throw new Error('number is out of range');
     }
     return result;
@@ -146,7 +142,7 @@ var binaryToDecimal = function (bignum, minDigits) {
         }
     }
     result.reverse();
-    return String.fromCharCode.apply(String, __spreadArray([], __read(result), false));
+    return String.fromCharCode.apply(String, __spreadArray([], __read(result)));
 };
 exports.binaryToDecimal = binaryToDecimal;
 /**
@@ -156,12 +152,12 @@ exports.binaryToDecimal = binaryToDecimal;
  */
 var signedBinaryToDecimal = function (bignum, minDigits) {
     if (minDigits === void 0) { minDigits = 1; }
-    if ((0, exports.isNegative)(bignum)) {
+    if (exports.isNegative(bignum)) {
         var x = bignum.slice();
-        (0, exports.negate)(x);
-        return '-' + (0, exports.binaryToDecimal)(x, minDigits);
+        exports.negate(x);
+        return '-' + exports.binaryToDecimal(x, minDigits);
     }
-    return (0, exports.binaryToDecimal)(bignum, minDigits);
+    return exports.binaryToDecimal(bignum, minDigits);
 };
 exports.signedBinaryToDecimal = signedBinaryToDecimal;
 var base58ToBinaryVarSize = function (s) {
@@ -280,7 +276,7 @@ var binaryToBase58 = function (bignum, minDigits) {
         finally { if (e_3) throw e_3.error; }
     }
     result.reverse();
-    return String.fromCharCode.apply(String, __spreadArray([], __read(result), false));
+    return String.fromCharCode.apply(String, __spreadArray([], __read(result)));
 };
 exports.binaryToBase58 = binaryToBase58;
 /** Convert an unsigned base-64 number in `s` to a bignum */
@@ -343,7 +339,7 @@ var digestSuffixRipemd160 = function (data, suffix) {
     return ripemd160(d);
 };
 var stringToKey = function (s, type, size, suffix) {
-    var whole = (0, exports.base58ToBinary)(size ? size + 4 : 0, s);
+    var whole = exports.base58ToBinary(size ? size + 4 : 0, s);
     var result = { type: type, data: new Uint8Array(whole.buffer, 0, whole.length - 4) };
     var digest = new Uint8Array(digestSuffixRipemd160(result.data, suffix));
     if (digest[0] !== whole[whole.length - 4] || digest[1] !== whole[whole.length - 3]
@@ -361,7 +357,7 @@ var keyToString = function (key, suffix, prefix) {
     for (var i = 0; i < 4; ++i) {
         whole[i + key.data.length] = digest[i];
     }
-    return prefix + (0, exports.binaryToBase58)(whole);
+    return prefix + exports.binaryToBase58(whole);
 };
 /** Convert key in `s` to binary form */
 var stringToPublicKey = function (s) {
@@ -369,7 +365,7 @@ var stringToPublicKey = function (s) {
         throw new Error('expected string containing public key');
     }
     if (s.substr(0, 3) === 'EOS') {
-        var whole = (0, exports.base58ToBinary)(exports.publicKeyDataSize + 4, s.substr(3));
+        var whole = exports.base58ToBinary(exports.publicKeyDataSize + 4, s.substr(3));
         var key = { type: KeyType.k1, data: new Uint8Array(exports.publicKeyDataSize) };
         for (var i = 0; i < exports.publicKeyDataSize; ++i) {
             key.data[i] = whole[i];
@@ -429,7 +425,7 @@ exports.publicKeyToString = publicKeyToString;
  */
 var convertLegacyPublicKey = function (s) {
     if (s.substr(0, 3) === 'EOS') {
-        return (0, exports.publicKeyToString)((0, exports.stringToPublicKey)(s));
+        return exports.publicKeyToString(exports.stringToPublicKey(s));
     }
     return s;
 };
@@ -456,7 +452,7 @@ var stringToPrivateKey = function (s) {
         // todo: Verify checksum: sha256(sha256(key.data)).
         //       Not critical since a bad key will fail to produce a
         //       valid signature anyway.
-        var whole = (0, exports.base58ToBinary)(exports.privateKeyDataSize + 5, s);
+        var whole = exports.base58ToBinary(exports.privateKeyDataSize + 5, s);
         var key = { type: KeyType.k1, data: new Uint8Array(exports.privateKeyDataSize) };
         if (whole[0] !== 0x80) {
             throw new Error('unrecognized private key type');
@@ -474,7 +470,7 @@ var privateKeyToLegacyString = function (key) {
         var whole_1 = [];
         whole_1.push(128);
         key.data.forEach(function (byte) { return whole_1.push(byte); });
-        var digest = new Uint8Array((0, hash_js_1.sha256)().update((0, hash_js_1.sha256)().update(whole_1).digest()).digest());
+        var digest = new Uint8Array(hash_js_1.sha256().update(hash_js_1.sha256().update(whole_1).digest()).digest());
         var result = new Uint8Array(exports.privateKeyDataSize + 5);
         for (var i = 0; i < whole_1.length; i++) {
             result[i] = whole_1[i];
@@ -482,7 +478,7 @@ var privateKeyToLegacyString = function (key) {
         for (var i = 0; i < 4; i++) {
             result[i + whole_1.length] = digest[i];
         }
-        return (0, exports.binaryToBase58)(result);
+        return exports.binaryToBase58(result);
     }
     else if (key.type === KeyType.r1 || key.type === KeyType.wa) {
         throw new Error('Key format not supported in legacy conversion');

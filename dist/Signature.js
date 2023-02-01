@@ -12,9 +12,9 @@ var Signature = /** @class */ (function () {
     }
     /** Instantiate Signature from an EOSIO-format Signature */
     Signature.fromString = function (sig, ec) {
-        var signature = (0, eosjs_numeric_1.stringToSignature)(sig);
+        var signature = eosjs_numeric_1.stringToSignature(sig);
         if (!ec) {
-            ec = (0, eosjs_key_conversions_1.constructElliptic)(signature.type);
+            ec = eosjs_key_conversions_1.constructElliptic(signature.type);
         }
         return new Signature(signature, ec);
     };
@@ -34,7 +34,7 @@ var Signature = /** @class */ (function () {
         }
         var sigData = new Uint8Array([eosioRecoveryParam].concat(r, s));
         if (!ec) {
-            ec = (0, eosjs_key_conversions_1.constructElliptic)(keyType);
+            ec = eosjs_key_conversions_1.constructElliptic(keyType);
         }
         return new Signature({
             type: keyType,
@@ -67,7 +67,7 @@ var Signature = /** @class */ (function () {
     };
     /** Export Signature as EOSIO-format Signature */
     Signature.prototype.toString = function () {
-        return (0, eosjs_numeric_1.signatureToString)(this.signature);
+        return eosjs_numeric_1.signatureToString(this.signature);
     };
     /** Export Signature in binary format */
     Signature.prototype.toBinary = function () {

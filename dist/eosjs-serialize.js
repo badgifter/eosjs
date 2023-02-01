@@ -32,14 +32,10 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 var __values = (this && this.__values) || function(o) {
     var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
@@ -331,7 +327,7 @@ var SerialBuffer = /** @class */ (function () {
             throw new Error('Expected string containing symbol_code');
         }
         var a = [];
-        a.push.apply(a, __spreadArray([], __read(this.textEncoder.encode(name)), false));
+        a.push.apply(a, __spreadArray([], __read(this.textEncoder.encode(name))));
         while (a.length < 8) {
             a.push(0);
         }
@@ -356,7 +352,7 @@ var SerialBuffer = /** @class */ (function () {
             throw new Error('Expected symbol to be A-Z and between one and seven characters');
         }
         var a = [precision & 0xff];
-        a.push.apply(a, __spreadArray([], __read(this.textEncoder.encode(name)), false));
+        a.push.apply(a, __spreadArray([], __read(this.textEncoder.encode(name))));
         while (a.length < 8) {
             a.push(0);
         }
@@ -660,7 +656,7 @@ function serializeVariant(buffer, data, state, allowExtensions) {
     }
     var i = this.fields.findIndex(function (field) { return field.name === data[0]; });
     if (i < 0) {
-        throw new Error("type \"".concat(data[0], "\" is not valid for variant"));
+        throw new Error("type \"" + data[0] + "\" is not valid for variant");
     }
     buffer.pushVaruint32(i);
     this.fields[i].type.serialize(buffer, data[1], state, allowExtensions);
@@ -668,7 +664,7 @@ function serializeVariant(buffer, data, state, allowExtensions) {
 function deserializeVariant(buffer, state, allowExtensions) {
     var i = buffer.getVaruint32();
     if (i >= this.fields.length) {
-        throw new Error("type index ".concat(i, " is not valid for variant"));
+        throw new Error("type index " + i + " is not valid for variant");
     }
     var field = this.fields[i];
     return [field.name, field.type.deserialize(buffer, state, allowExtensions)];
@@ -856,8 +852,8 @@ var createInitialTypes = function () {
         }),
         float128: createType({
             name: 'float128',
-            serialize: function (buffer, data) { buffer.pushUint8ArrayChecked((0, exports.hexToUint8Array)(data), 16); },
-            deserialize: function (buffer) { return (0, exports.arrayToHex)(buffer.getUint8Array(16)); },
+            serialize: function (buffer, data) { buffer.pushUint8ArrayChecked(exports.hexToUint8Array(data), 16); },
+            deserialize: function (buffer) { return exports.arrayToHex(buffer.getUint8Array(16)); },
         }),
         bytes: createType({
             name: 'bytes',
@@ -866,7 +862,7 @@ var createInitialTypes = function () {
                     buffer.pushBytes(data);
                 }
                 else {
-                    buffer.pushBytes((0, exports.hexToUint8Array)(data));
+                    buffer.pushBytes(exports.hexToUint8Array(data));
                 }
             },
             deserialize: function (buffer, state) {
@@ -874,7 +870,7 @@ var createInitialTypes = function () {
                     return buffer.getBytes();
                 }
                 else {
-                    return (0, exports.arrayToHex)(buffer.getBytes());
+                    return exports.arrayToHex(buffer.getBytes());
                 }
             },
         }),
@@ -890,18 +886,18 @@ var createInitialTypes = function () {
         }),
         time_point: createType({
             name: 'time_point',
-            serialize: function (buffer, data) { buffer.pushNumberAsUint64((0, exports.dateToTimePoint)(data)); },
-            deserialize: function (buffer) { return (0, exports.timePointToDate)(buffer.getUint64AsNumber()); },
+            serialize: function (buffer, data) { buffer.pushNumberAsUint64(exports.dateToTimePoint(data)); },
+            deserialize: function (buffer) { return exports.timePointToDate(buffer.getUint64AsNumber()); },
         }),
         time_point_sec: createType({
             name: 'time_point_sec',
-            serialize: function (buffer, data) { buffer.pushUint32((0, exports.dateToTimePointSec)(data)); },
-            deserialize: function (buffer) { return (0, exports.timePointSecToDate)(buffer.getUint32()); },
+            serialize: function (buffer, data) { buffer.pushUint32(exports.dateToTimePointSec(data)); },
+            deserialize: function (buffer) { return exports.timePointSecToDate(buffer.getUint32()); },
         }),
         block_timestamp_type: createType({
             name: 'block_timestamp_type',
-            serialize: function (buffer, data) { buffer.pushUint32((0, exports.dateToBlockTimestamp)(data)); },
-            deserialize: function (buffer) { return (0, exports.blockTimestampToDate)(buffer.getUint32()); },
+            serialize: function (buffer, data) { buffer.pushUint32(exports.dateToBlockTimestamp(data)); },
+            deserialize: function (buffer) { return exports.blockTimestampToDate(buffer.getUint32()); },
         }),
         symbol_code: createType({
             name: 'symbol_code',
@@ -910,8 +906,8 @@ var createInitialTypes = function () {
         }),
         symbol: createType({
             name: 'symbol',
-            serialize: function (buffer, data) { buffer.pushSymbol((0, exports.stringToSymbol)(data)); },
-            deserialize: function (buffer) { return (0, exports.symbolToString)(buffer.getSymbol()); },
+            serialize: function (buffer, data) { buffer.pushSymbol(exports.stringToSymbol(data)); },
+            deserialize: function (buffer) { return exports.symbolToString(buffer.getSymbol()); },
         }),
         asset: createType({
             name: 'asset',
@@ -920,18 +916,18 @@ var createInitialTypes = function () {
         }),
         checksum160: createType({
             name: 'checksum160',
-            serialize: function (buffer, data) { buffer.pushUint8ArrayChecked((0, exports.hexToUint8Array)(data), 20); },
-            deserialize: function (buffer) { return (0, exports.arrayToHex)(buffer.getUint8Array(20)); },
+            serialize: function (buffer, data) { buffer.pushUint8ArrayChecked(exports.hexToUint8Array(data), 20); },
+            deserialize: function (buffer) { return exports.arrayToHex(buffer.getUint8Array(20)); },
         }),
         checksum256: createType({
             name: 'checksum256',
-            serialize: function (buffer, data) { buffer.pushUint8ArrayChecked((0, exports.hexToUint8Array)(data), 32); },
-            deserialize: function (buffer) { return (0, exports.arrayToHex)(buffer.getUint8Array(32)); },
+            serialize: function (buffer, data) { buffer.pushUint8ArrayChecked(exports.hexToUint8Array(data), 32); },
+            deserialize: function (buffer) { return exports.arrayToHex(buffer.getUint8Array(32)); },
         }),
         checksum512: createType({
             name: 'checksum512',
-            serialize: function (buffer, data) { buffer.pushUint8ArrayChecked((0, exports.hexToUint8Array)(data), 64); },
-            deserialize: function (buffer) { return (0, exports.arrayToHex)(buffer.getUint8Array(64)); },
+            serialize: function (buffer, data) { buffer.pushUint8ArrayChecked(exports.hexToUint8Array(data), 64); },
+            deserialize: function (buffer) { return exports.arrayToHex(buffer.getUint8Array(64)); },
         }),
         public_key: createType({
             name: 'public_key',
@@ -963,7 +959,7 @@ var createInitialTypes = function () {
 }; // createInitialTypes()
 exports.createInitialTypes = createInitialTypes;
 var createAbiTypes = function () {
-    var initialTypes = (0, exports.createInitialTypes)();
+    var initialTypes = exports.createInitialTypes();
     initialTypes.set('extensions_entry', createType({
         name: 'extensions_entry',
         baseName: '',
@@ -1145,7 +1141,7 @@ exports.createAbiTypes = createAbiTypes;
 var getType = function (types, name) {
     var type = types.get(name);
     if (type && type.aliasOfName) {
-        return (0, exports.getType)(types, type.aliasOfName);
+        return exports.getType(types, type.aliasOfName);
     }
     if (type) {
         return type;
@@ -1153,7 +1149,7 @@ var getType = function (types, name) {
     if (name.endsWith('[]')) {
         return createType({
             name: name,
-            arrayOf: (0, exports.getType)(types, name.substr(0, name.length - 2)),
+            arrayOf: exports.getType(types, name.substr(0, name.length - 2)),
             serialize: serializeArray,
             deserialize: deserializeArray,
         });
@@ -1161,7 +1157,7 @@ var getType = function (types, name) {
     if (name.endsWith('?')) {
         return createType({
             name: name,
-            optionalOf: (0, exports.getType)(types, name.substr(0, name.length - 1)),
+            optionalOf: exports.getType(types, name.substr(0, name.length - 1)),
             serialize: serializeOptional,
             deserialize: deserializeOptional,
         });
@@ -1169,7 +1165,7 @@ var getType = function (types, name) {
     if (name.endsWith('$')) {
         return createType({
             name: name,
-            extensionOf: (0, exports.getType)(types, name.substr(0, name.length - 1)),
+            extensionOf: exports.getType(types, name.substr(0, name.length - 1)),
             serialize: serializeExtension,
             deserialize: deserializeExtension,
         });
@@ -1249,12 +1245,12 @@ var getTypesFromAbi = function (initialTypes, abi) {
         for (var types_1 = __values(types), types_1_1 = types_1.next(); !types_1_1.done; types_1_1 = types_1.next()) {
             var _q = __read(types_1_1.value, 2), name_3 = _q[0], type = _q[1];
             if (type.baseName) {
-                type.base = (0, exports.getType)(types, type.baseName);
+                type.base = exports.getType(types, type.baseName);
             }
             try {
                 for (var _r = (e_10 = void 0, __values(type.fields)), _s = _r.next(); !_s.done; _s = _r.next()) {
                     var field = _s.value;
-                    field.type = (0, exports.getType)(types, field.typeName);
+                    field.type = exports.getType(types, field.typeName);
                 }
             }
             catch (e_10_1) { e_10 = { error: e_10_1 }; }
@@ -1284,7 +1280,7 @@ var transactionHeader = function (refBlock, expireSeconds) {
     var timestamp = refBlock.header ? refBlock.header.timestamp : refBlock.timestamp;
     var prefix = parseInt(reverseHex(refBlock.id.substr(16, 8)), 16);
     return {
-        expiration: (0, exports.timePointSecToDate)((0, exports.dateToTimePointSec)(timestamp) + expireSeconds),
+        expiration: exports.timePointSecToDate(exports.dateToTimePointSec(timestamp) + expireSeconds),
         ref_block_num: refBlock.block_num & 0xffff,
         ref_block_prefix: prefix,
     };
@@ -1294,11 +1290,11 @@ exports.transactionHeader = transactionHeader;
 var serializeActionData = function (contract, account, name, data, textEncoder, textDecoder) {
     var action = contract.actions.get(name);
     if (!action) {
-        throw new Error("Unknown action ".concat(name, " in contract ").concat(account));
+        throw new Error("Unknown action " + name + " in contract " + account);
     }
     var buffer = new SerialBuffer({ textEncoder: textEncoder, textDecoder: textDecoder });
     action.serialize(buffer, data);
-    return (0, exports.arrayToHex)(buffer.asUint8Array());
+    return exports.arrayToHex(buffer.asUint8Array());
 };
 exports.serializeActionData = serializeActionData;
 /** Return action in serialized form */
@@ -1307,7 +1303,7 @@ var serializeAction = function (contract, account, name, authorization, data, te
         account: account,
         name: name,
         authorization: authorization,
-        data: (0, exports.serializeActionData)(contract, account, name, data, textEncoder, textDecoder),
+        data: exports.serializeActionData(contract, account, name, data, textEncoder, textDecoder),
     };
 };
 exports.serializeAction = serializeAction;
@@ -1315,10 +1311,10 @@ exports.serializeAction = serializeAction;
 var deserializeActionData = function (contract, account, name, data, textEncoder, textDecoder) {
     var action = contract.actions.get(name);
     if (typeof data === 'string') {
-        data = (0, exports.hexToUint8Array)(data);
+        data = exports.hexToUint8Array(data);
     }
     if (!action) {
-        throw new Error("Unknown action ".concat(name, " in contract ").concat(account));
+        throw new Error("Unknown action " + name + " in contract " + account);
     }
     var buffer = new SerialBuffer({ textDecoder: textDecoder, textEncoder: textEncoder });
     buffer.pushArray(data);
@@ -1331,7 +1327,7 @@ var deserializeAction = function (contract, account, name, authorization, data, 
         account: account,
         name: name,
         authorization: authorization,
-        data: (0, exports.deserializeActionData)(contract, account, name, data, textEncoder, textDecoder),
+        data: exports.deserializeActionData(contract, account, name, data, textEncoder, textDecoder),
     };
 };
 exports.deserializeAction = deserializeAction;
@@ -1380,7 +1376,7 @@ var deserializeAnyvar = function (buffer, state) {
 };
 exports.deserializeAnyvar = deserializeAnyvar;
 var deserializeAnyvarShort = function (buffer) {
-    return (0, exports.deserializeAnyvar)(buffer, new SerializerState({ useShortForm: true }));
+    return exports.deserializeAnyvar(buffer, new SerializerState({ useShortForm: true }));
 };
 exports.deserializeAnyvarShort = deserializeAnyvarShort;
 var serializeAnyObject = function (buffer, obj) {
@@ -1391,7 +1387,7 @@ var serializeAnyObject = function (buffer, obj) {
         for (var entries_2 = __values(entries), entries_2_1 = entries_2.next(); !entries_2_1.done; entries_2_1 = entries_2.next()) {
             var _b = __read(entries_2_1.value, 2), key = _b[0], value = _b[1];
             buffer.pushString(key);
-            (0, exports.serializeAnyvar)(buffer, value);
+            exports.serializeAnyvar(buffer, value);
         }
     }
     catch (e_11_1) { e_11 = { error: e_11_1 }; }
@@ -1415,7 +1411,7 @@ var deserializeAnyObject = function (buffer, state) {
             }
             key = key + '_' + j;
         }
-        result[key] = (0, exports.deserializeAnyvar)(buffer, state);
+        result[key] = exports.deserializeAnyvar(buffer, state);
     }
     return result;
 };
@@ -1426,7 +1422,7 @@ var serializeAnyArray = function (buffer, arr) {
     try {
         for (var arr_1 = __values(arr), arr_1_1 = arr_1.next(); !arr_1_1.done; arr_1_1 = arr_1.next()) {
             var x = arr_1_1.value;
-            (0, exports.serializeAnyvar)(buffer, x);
+            exports.serializeAnyvar(buffer, x);
         }
     }
     catch (e_12_1) { e_12 = { error: e_12_1 }; }
@@ -1442,13 +1438,13 @@ var deserializeAnyArray = function (buffer, state) {
     var len = buffer.getVaruint32();
     var result = [];
     for (var i = 0; i < len; ++i) {
-        result.push((0, exports.deserializeAnyvar)(buffer, state));
+        result.push(exports.deserializeAnyvar(buffer, state));
     }
     return result;
 };
 exports.deserializeAnyArray = deserializeAnyArray;
 var addAdditionalTypes = function () {
-    var initialTypes = (0, exports.createInitialTypes)();
+    var initialTypes = exports.createInitialTypes();
     initialTypes.set('null_t', createType({
         name: 'null_t',
         serialize: function (buffer, anyvar) { },
@@ -1532,7 +1528,7 @@ var serializeQuery = function (buffer, query) {
     }
     else {
         buffer.push(1);
-        (0, exports.serializeAnyvar)(buffer, arg);
+        exports.serializeAnyvar(buffer, arg);
     }
     if (filter === undefined) {
         buffer.push(0);
@@ -1542,7 +1538,7 @@ var serializeQuery = function (buffer, query) {
         try {
             for (var filter_1 = __values(filter), filter_1_1 = filter_1.next(); !filter_1_1.done; filter_1_1 = filter_1.next()) {
                 var q = filter_1_1.value;
-                (0, exports.serializeQuery)(buffer, q);
+                exports.serializeQuery(buffer, q);
             }
         }
         catch (e_13_1) { e_13 = { error: e_13_1 }; }

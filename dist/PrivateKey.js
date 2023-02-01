@@ -12,7 +12,7 @@ var PrivateKey = /** @class */ (function () {
     /** Instantiate private key from an `elliptic`-format private key */
     PrivateKey.fromElliptic = function (privKey, keyType, ec) {
         if (!ec) {
-            ec = (0, eosjs_key_conversions_1.constructElliptic)(keyType);
+            ec = eosjs_key_conversions_1.constructElliptic(keyType);
         }
         return new PrivateKey({
             type: keyType,
@@ -21,9 +21,9 @@ var PrivateKey = /** @class */ (function () {
     };
     /** Instantiate private key from an EOSIO-format private key */
     PrivateKey.fromString = function (keyString, ec) {
-        var privateKey = (0, eosjs_numeric_1.stringToPrivateKey)(keyString);
+        var privateKey = eosjs_numeric_1.stringToPrivateKey(keyString);
         if (!ec) {
-            ec = (0, eosjs_key_conversions_1.constructElliptic)(privateKey.type);
+            ec = eosjs_key_conversions_1.constructElliptic(privateKey.type);
         }
         return new PrivateKey(privateKey, ec);
     };
@@ -32,11 +32,11 @@ var PrivateKey = /** @class */ (function () {
         return this.ec.keyFromPrivate(this.key.data);
     };
     PrivateKey.prototype.toLegacyString = function () {
-        return (0, eosjs_numeric_1.privateKeyToLegacyString)(this.key);
+        return eosjs_numeric_1.privateKeyToLegacyString(this.key);
     };
     /** Export private key as EOSIO-format private key */
     PrivateKey.prototype.toString = function () {
-        return (0, eosjs_numeric_1.privateKeyToString)(this.key);
+        return eosjs_numeric_1.privateKeyToString(this.key);
     };
     /** Get key type from key */
     PrivateKey.prototype.getType = function () {
